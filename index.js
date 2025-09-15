@@ -3,15 +3,20 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 const app = express();
-//test
-// Middleware
-app.use(cors());
-app.use(express.json()); // for parsing JSON
 
-// MongoDB connection
+// -------------------
+// Middleware
+// -------------------
+app.use(cors());
+app.use(express.json());
+
+// -------------------
+// MongoDB Connection
+// -------------------
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -20,7 +25,9 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
+// -------------------
 // Schema & Model
+// -------------------
 const formSchema = new mongoose.Schema({
   preset: String,
   language: String,
@@ -37,9 +44,11 @@ const formSchema = new mongoose.Schema({
 
 const Form = mongoose.model("Form", formSchema);
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("🚀 API is running...");
+// -------------------
+// API Routes
+// -------------------
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
 app.post("/api/forms", async (req, res) => {
@@ -63,6 +72,19 @@ app.get("/api/forms", async (req, res) => {
   }
 });
 
-// Start server
+// -------------------
+// Serve React Frontend
+// -------------------
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, "dist")));
+
+// SPA fallback for React Router — must be after all API routes
+app.get(/^(?!\/api).*$/, (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
+// -------------------
+// Start Server
+// -------------------
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

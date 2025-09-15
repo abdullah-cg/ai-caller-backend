@@ -76,11 +76,19 @@ app.get("/api/forms", async (req, res) => {
 // Serve React Frontend
 // -------------------
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, "dist")));
 
-// SPA fallback for React Router — must be after all API routes
-app.get(/^(?!\/api).*$/, (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+// Serve static files from the dist directory
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Set proper MIME type for CSS files
+app.use('*.css', (req, res, next) => {
+  res.set('Content-Type', 'text/css');
+  next();
+});
+
+// SPA fallback for React Router - must be after all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 // -------------------

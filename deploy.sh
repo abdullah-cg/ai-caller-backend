@@ -30,7 +30,7 @@ npm install
 
 # Restart PM2 process
 echo "🔄 Restarting backend with PM2..."
-pm2 restart ai-caller-backend || pm2 start index.js --name "ai-caller-backend"
+pm2 restart ai-caller-backend 2>/dev/null || pm2 start index.js --name "ai-caller-backend"
 
 echo "✅ Deployment complete!"
 echo "🌐 Application running on port ${PORT:-3000}"

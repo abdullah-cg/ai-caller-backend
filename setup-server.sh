@@ -73,7 +73,7 @@ npm install
 
 # Setup PM2
 echo "🚀 Starting application with PM2..."
-pm2 start ecosystem.config.js
+pm2 start index.js --name "ai-caller-backend"
 pm2 save
 pm2 startup | tail -n 1 | bash
 

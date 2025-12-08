@@ -1,7 +1,7 @@
 // PM2 ecosystem configuration file
-// Usage: pm2 start ecosystem.config.js
+// Usage: pm2 start ecosystem.config.cjs
 
-module.exports = {
+export default {
   apps: [
     {
       name: "ai-caller-backend",

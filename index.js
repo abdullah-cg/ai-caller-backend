@@ -78,17 +78,17 @@ app.get("/api/forms", async (req, res) => {
 const __dirname = path.resolve();
 
 // Serve static files from the dist directory
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, "dist")));
 
 // Set proper MIME type for CSS files
-app.use('*.css', (req, res, next) => {
-  res.set('Content-Type', 'text/css');
+app.use("*.css", (req, res, next) => {
+  res.set("Content-Type", "text/css");
   next();
 });
 
 // SPA fallback for React Router - must be after all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 // -------------------

@@ -1,8 +1,5 @@
 import { WebClient } from "@slack/web-api";
 
-// Initialize Slack client
-const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
-
 /**
  * Send a notification to Slack channel
  * @param {string} message - The message to send
@@ -15,6 +12,9 @@ export async function sendSlackNotification(message, data = null) {
       console.warn("⚠️ Slack not configured. Skipping notification.");
       return;
     }
+
+    // Initialize Slack client with token from env
+    const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
     // Format the message with data if provided
     let formattedMessage = message;
@@ -47,6 +47,9 @@ export async function sendSlackRichNotification(title, fields = {}) {
       console.warn("⚠️ Slack not configured. Skipping notification.");
       return;
     }
+
+    // Initialize Slack client with token from env
+    const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
     const blocks = [
       {

@@ -4,6 +4,10 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import {
+  sendSlackNotification,
+  sendSlackRichNotification,
+} from "./slackNotifier.js";
 
 dotenv.config();
 const app = express();
@@ -55,6 +59,19 @@ app.post("/api/forms", async (req, res) => {
   try {
     const formData = new Form(req.body);
     await formData.save();
+
+    // Send Slack notification
+    await sendSlackRichNotification("📝 New Form Submission", {
+      Name: `${formData.firstName} ${formData.lastName}`,
+      Email: formData.email || "N/A",
+      Phone: formData.phoneNumber || "N/A",
+      Company: formData.company || "N/A",
+      Preset: formData.preset || "N/A",
+      Language: formData.language || "N/A",
+      Tab: formData.tab || "N/A",
+      "Submitted At": new Date().toLocaleString(),
+    });
+
     res.status(201).json({ message: "Form saved successfully!" });
   } catch (error) {
     console.error("Error saving form:", error);
